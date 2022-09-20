@@ -1,6 +1,5 @@
 class Randomizer
     @@num_randomizations = 0
-    @@up = nil
 
     module CoinSide
         H = 1
@@ -13,9 +12,9 @@ class Randomizer
         if self.class.name == Coin
             side = rand(CoinSide::H..CoinSide::T)
             if side == CoinSide::H
-                @@up = :H
+                @up = :H
             else
-                @@up = :T
+                @up = :T
             end
         # elsif self.class.name == Die
         #     @up = rand(1..6)
@@ -24,12 +23,8 @@ class Randomizer
         return self
     end
 
-    def get_up()
-        return @@up
-    end
-
     def result() # returns the result of the randomization, or nil if never randomized
-        return self
+        return @up
     end
 
     def calls() # returns the number of randomizations performed

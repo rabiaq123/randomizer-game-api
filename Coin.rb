@@ -27,13 +27,14 @@ class Coin < Randomizer
     end
 
     def sideup() # returns :H or :T (the result of the last flip) or nil (if no flips yet done), is a synonym for result()
-        return self.get_up
-        # return self.up
+        @up = self.result
+        return @up
     end
 end
 
 coin = Coin.new 0.25 # Create class and save it in variable
 puts coin.denomination
-coin.flip.randomize
+coin.flip
+# coin.flip.randomize # this is how method chaining works
 puts coin.sideup # should be nil if flip() has not been called before
 puts coin.calls

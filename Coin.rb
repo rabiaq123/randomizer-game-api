@@ -38,16 +38,3 @@ class Coin < Randomizer
         end
     end
 end
-
-puts "-------"
-puts "Coin.rb"
-coin = Coin.new 0.25 # Create class and save it in variable
-puts coin.denomination
-coin.flip # use .randomize for method chaining
-puts coin.sideup # should be nil if flip() has not been called before
-puts coin.calls # number of times randomize() has been called
-puts "After reset"
-coin.reset
-puts coin.sideup # should be nil
-puts "Done"
-puts ""

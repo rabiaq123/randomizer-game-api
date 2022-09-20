@@ -28,16 +28,3 @@ class Die < Randomizer
     end
 
 end
-
-puts "-------"
-puts "Die.rb"
-die = Die.new(6,"yellow") # Create class and save it in variable
-puts die.colour
-puts die.sides
-die.roll # use .randomize for method chaining
-puts die.sideup # should be nil if roll() has not been called before
-puts die.calls # number of times randomize() has been called
-puts "After reset"
-die.reset
-puts die.sideup # should be nil
-puts "Done"

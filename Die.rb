@@ -7,6 +7,7 @@ class Die < Randomizer
     def initialize(sides, colour)
         @sides = sides
         @colour = colour
+        @up = nil
         @num_randomizations = 0
         @item = :die
     end

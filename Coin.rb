@@ -18,6 +18,7 @@ class Coin < Randomizer
             @denomination = denomination
         end
         @sides = 2 # default for coin
+        @up = nil
         @num_randomizations = 0
         @item = :coin
     end

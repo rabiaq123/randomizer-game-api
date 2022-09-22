@@ -1,6 +1,8 @@
 require './Randomizer.rb'
 
 class Coin < Randomizer
+    # all Randomizers have the instance variables: ‘sides’ and ‘up’
+    attr_accessor :up, :sides, :denomination, :item, :num_randomizations
     module Denomination
         NICKEL = 0.05
         DIME = 0.10
@@ -8,7 +10,6 @@ class Coin < Randomizer
         LOONIE = 1
         TOONIE = 2
     end
-    attr_accessor :num_randomizations
 
     def initialize(denomination)
         if denomination != Denomination::NICKEL && denomination != Denomination::DIME && denomination != Denomination::QUARTER && denomination != Denomination::LOONIE && denomination != Denomination::TOONIE
@@ -18,6 +19,7 @@ class Coin < Randomizer
         end
         @sides = 2 # default for coin
         @num_randomizations = 0
+        @item = :coin
     end
 
     def denomination() # returns the denomination of the coin (does not set it)

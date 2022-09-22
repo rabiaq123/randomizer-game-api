@@ -1,9 +1,4 @@
 class Randomizer
-    module CoinSide
-        H = 1
-        T = 2
-    end
-
     def randomize() # both randomizes as well as returns self (for method chaining)
         @num_randomizations += 1
         @up = rand(1..@sides)

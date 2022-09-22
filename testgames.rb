@@ -5,25 +5,34 @@ require './Die.rb'
 puts "-------"
 puts "Coin.rb"
 coin = Coin.new 0.25 # Create class and save it in variable
-puts coin.denomination
+puts "coin.item: #{coin.item}" # should be coin
+puts "coin.denomination: #{coin.denomination}"
+puts "coin.sides: #{coin.sides}"
+puts "coin.sideup: #{coin.sideup}" # should be nil
 coin.flip # use .randomize for method chaining
-puts coin.sideup # should be nil if flip() has not been called before
-puts coin.calls # number of times randomize() has been called
-puts "After reset"
+puts "-- coin flipped!"
+# puts coin.up # should give same result as coin.sideup
+puts "coin.sideup: #{coin.sideup}" # should not be nil after flip()
+puts "coin.calls: #{coin.calls}" # number of times randomize() has been called
 coin.reset
-puts coin.sideup # should be nil
+puts "-- called reset!"
+puts "coin.sideup: #{coin.sideup}" # should be nil
 puts "Done"
 puts ""
 
 puts "-------"
 puts "Die.rb"
 die = Die.new(6,"yellow") # Create class and save it in variable
-puts die.colour
-puts die.sides
+puts "die.item: #{die.item}" # should be die
+puts "die.colour: #{die.colour}"
+puts "die.sides: #{die.sides}"
+puts "die.sideup: #{die.sideup}" # should be nil
 die.roll # use .randomize for method chaining
-puts die.sideup # should be nil if roll() has not been called before
-puts die.calls # number of times randomize() has been called
-puts "After reset"
+puts "-- die rolled!"
+# puts die.up # should give same result as die.sideup
+puts "die.sideup: #{die.sideup}" # should not be nil after roll()
+puts "die.calls: #{die.calls}" # number of times randomize() has been called
 die.reset
-puts die.sideup # should be nil
+puts "-- called reset!"
+puts "die.sideup: #{die.sideup}" # should be nil
 puts "Done"

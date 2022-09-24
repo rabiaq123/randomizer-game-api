@@ -4,18 +4,18 @@ class Coin < Randomizer
     # all Randomizers have the instance variables: ‘sides’ and ‘up’
     attr_accessor :up, :sides, :denomination, :item, :num_randomizations
     DENOMINATION = {
-        nickel: 0.05,
-        dime: 0.10,
-        quarter: 0.25,
-        loonie: 1,
-        toonie: 2
+        0.05 => 0.05,
+        0.10 => 0.10,
+        0.25 => 0.25,
+        1 => 1,
+        2 => 2,
     }
 
     def initialize(denomination)
-        if denomination != DENOMINATION[:nickel] && denomination != DENOMINATION[:dime] && denomination != DENOMINATION[:quarter] && denomination != DENOMINATION[:loonie] && denomination != DENOMINATION[:toonie]
-            @denomination = nil 
-        else
+        if DENOMINATION.has_key?(denomination)
             @denomination = denomination
+        else
+            @denomination = nil 
         end
         @sides = 2 # default for coin
         @up = nil

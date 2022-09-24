@@ -1,7 +1,7 @@
 class Randomizer
     def randomize() # both randomizes as well as returns self (for method chaining)
         @num_randomizations += 1
-        @up = rand(1..@sides)
+        @up = rand(1..@sides) # .. is inclusive, ... is exclusive
 
         return self
     end
@@ -20,5 +20,17 @@ class Randomizer
 
         return self
     end
+
+    def description() # ADDED returns a string describing the object
+        # :sides, :up, and :item all belong to Randomizer
+        description = { sides: @sides, up: @up, item: @item } # default description
+        if @item == :coin # if Coin, add :denomination
+            description[:denomination] = @denomination
+        elsif @item == :die # if Die, add :colour
+            description[:colour] = @colour
+        end
+        return description
+    end
+
 end
 

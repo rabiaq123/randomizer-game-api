@@ -5,7 +5,7 @@ class Bag < RandomizerContainer
 
     # Bag instance can contain contains Coins and Dice
 
-    def initialize(sides, colour)
+    def initialize()
         @randomizers = []
     end
 

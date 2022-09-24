@@ -1,11 +1,11 @@
 class RandomizerContainer
-    def store() # stores a randomizer in the container, returns self (for method chaining)
-        @randomizers << self
+    def store(randomizer) # stores a randomizer in the container, returns self (for method chaining)
+        @randomizers << randomizer
         return self
     end
 
     def store_all(randomizers) # stores all randomizers in the container, returns self (for method chaining)
-        @randomizers << randomizers
+        @randomizers = randomizers
         return self
     end
 
@@ -14,21 +14,38 @@ class RandomizerContainer
     end
 
     def move_all(randomizer_container) # remove each randomizer in container and store in self, returns self (for method chaining)
-        @randomizers << randomizer_container
-        randomizer_container = nil
+        @randomizers = randomizer_container.randomizers
+        randomizer_container.randomizers = nil
         return self
     end
 
-    def empty() # abstract method to remove all members from the container
-        @randomizers = [] # resetting randomizers container
+    def empty() # abstract method to remove all members from the container; will be overriden in subclasses
         return self
     end
 
-    def select(description, amt)
+    def select(description, amt) # returns a Hand object that holds up to 'amt' selected items
+        hand = Hand.new()
+
+        # if all items are desired, the symbol :all will be supplied instead of a number
+        if amt == :all
+            amt = @randomizers.length
+        end
         # selects items based on the description provided
-        # remove the selected items from self;
-        # returns a Hand object that holds the selected items up to the number entered into amount
-        # (if you want all items, supply the symbol :all instead of a number)
+        if description.empty?
+            amt.times do
+                hand.store(@randomizers.pop()) # remove last added randomizer and store in hand
+            end
+        else
+            @randomizers.delete_if do |randomizer|
+                if description <= randomizer.description && amt != 0 # if description provided is a subset of randomizer.description
+                    hand.store(randomizer)
+                    amt -= 1
+                    true # remove the randomizer from the array
+                end
+            end
+        end
+
+        return hand
     end
 
 end

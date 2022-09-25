@@ -9,6 +9,17 @@ class Bag < RandomizerContainer
         @randomizers = []
     end
 
+    def move_all(randomizer_container) # override to reset all randomizers once in Bag
+        randomizer_container.randomizers = nil
+        @randomizers = nil
+        return self
+    end
+
+    def store_all(randomizers) # override to reset all randomizers once in Bag
+        @randomizers = nil
+        return self
+    end
+
     def empty() # empties all items from the Bag into a Hand, which is returned
         hand = Hand.new()
         hand.randomizers = @randomizers

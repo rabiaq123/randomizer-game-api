@@ -5,7 +5,7 @@ class RandomizerContainer
     end
 
     def store_all(randomizers) # stores all randomizers in the container, returns self (for method chaining)
-        @randomizers = randomizers
+        @randomizers.concat(randomizers)
         return self
     end
 
@@ -14,8 +14,8 @@ class RandomizerContainer
     end
 
     def move_all(randomizer_container) # remove each randomizer in container and store in self, returns self (for method chaining)
-        @randomizers = randomizer_container.randomizers
-        randomizer_container.randomizers = nil
+        @randomizers.concat(randomizer_container.randomizers)
+        randomizer_container.randomizers = []
         return self
     end
 

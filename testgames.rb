@@ -22,53 +22,66 @@ puts "coin.description: #{coin.description}" # get coin description
 puts "Done"
 puts ""
 
-# # checking select method for multiple coins
+
+# checking select method for multiple coins
 puts "-------"
 puts "Checking select method for multiple coins"
 coin1 = Coin.new 0.25
 coin2 = Coin.new 1
-coin3 = Coin.new 0.25
-coin4 = Coin.new 0.05
-coin5 = Coin.new 0.10
-coin6 = Coin.new 1
-die = Die.new(6,"yellow")
+coin3 = Coin.new 1
+die1 = Die.new(6, :green)
+die2 = Die.new(3, :blue)
+die3 = Die.new(5, :blue)
+die4 = Die.new(4, :red)
 coin1.flip # use .randomize for method chaining
 coin2.flip # use .randomize for method chaining
 coin3.flip # use .randomize for method chaining
-coin4.flip # use .randomize for method chaining
-coin5.flip # use .randomize for method chaining
-coin6.flip # use .randomize for method chaining
-die.roll # use .randomize for method chaining
-puts "-- coins flipped!"
-# puts "coin1.description: #{coin1.description}" # coin1 description
-# puts "coin2.description: #{coin2.description}" # coin2 description
-# puts "coin3.description: #{coin3.description}" # coin3 description
-# puts "coin3.description: #{coin4.description}" # coin4 description
-# puts "coin3.description: #{coin5.description}" # coin4 description
-# puts "coin3.description: #{coin6.description}" # coin4 description
-# puts "die.description: #{die.description}" # die description
-# puts ""
-puts "-- placing randomizers in bag"
+die1.roll # use .randomize for method chaining
+die2.roll # use .randomize for method chaining
+die3.roll # use .randomize for method chaining
+die4.roll # use .randomize for method chaining
+# puts "-- randomized!"
+puts "-- putting randomizers in hand"
 bag = Bag.new
-randomizers = [coin1, coin2, coin3, coin4, coin5, coin6, die]
-# puts "randomizers: #{randomizers}"
+hand = Hand.new
+randomizers = [coin1, coin2, coin3, die1, die2, die3, die4]
+# randomizers.each do |randomizer|
+#   puts randomizer.description
+# end
 # puts ""
-bag.store_all(randomizers)
-# puts "bag.randomizers: #{bag.randomizers}"
-# puts ""
-puts "-- selecting coins"
-hand = bag.select({ item: :coin }, 1)
-puts "items selected: #{hand.randomizers}"
+hand.store_all(randomizers)
+hand.randomizers.each do |randomizer|
+  puts randomizer.description
+end
 puts ""
-puts "items left: #{bag.randomizers}"
+puts "-- randomizers in bag"
+bag.move_all(hand)
+# bag.randomizers.each do |randomizer|
+#   puts randomizer.description
+# end
+# puts ""
+# puts "-- randomizers still in hand"
+# puts hand.randomizers
+# puts ""
+puts "-- selecting"
+hand = bag.select({item: :die, sides: 6}, :all) 
+puts "items selected:"
+hand.randomizers.each do |randomizer|
+  puts randomizer.description
+end
+puts "items left:"
+bag.randomizers.each do |randomizer|
+  puts randomizer.description
+end
 puts ""
 puts "Done"
 puts ""
 
+
 # checking Die methods and attributes for one die
 puts "-------"
 puts "Die.rb"
-die = Die.new(6,"yellow")
+die = Die.new(6, :yellow)
 puts "die.item: #{die.item}" # should be die
 puts "die.colour: #{die.colour}"
 puts "die.sides: #{die.sides}"

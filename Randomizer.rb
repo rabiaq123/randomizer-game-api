@@ -3,6 +3,14 @@ class Randomizer
         @num_randomizations += 1
         @up = rand(1..@sides) # .. is inclusive, ... is exclusive
 
+        if self.class == Coin
+            if @up == 1
+                @up = :H
+            elsif @up == 2
+                @up = :T
+            end
+        end
+
         return self
     end
 

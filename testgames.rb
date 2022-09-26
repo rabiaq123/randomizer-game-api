@@ -45,7 +45,7 @@ hand.randomizers.each { |randomizer| randomizer.randomize }
 puts "-- moving randomizers to bag"
 bag.move_all(hand)
 puts "-- selecting from bag"
-hand = bag.select({item: :coin, up: :H}, :all) 
+hand = bag.select({}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
   puts randomizer.description

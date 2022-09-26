@@ -1,15 +1,22 @@
 require './Randomizer.rb'
 
 class Die < Randomizer
-    # all Randomizers have the instance variables ‘sides’ and ‘up’
+    # all Randomizers have the instance variables 'sides', 'up', and 'item'
     attr_accessor :sides, :up, :item, :colour, :num_randomizations
+    COLOUR = {
+        :red => "red",
+        :green => "green",
+        :blue => "blue",
+        :yellow => "yellow",
+        :black => "black",
+    }
 
     def initialize(sides, colour)
         @sides = sides
-        @colour = colour
+        @colour = COLOUR.key?(colour) && colour || COLOUR.value?(colour) && COLOUR.key(colour)
         @up = nil
         @num_randomizations = 0
-        @item = :die
+        @item = ITEM.key(2)
     end
 
     def colour() # returns the colour of the die (does not set it)

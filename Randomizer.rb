@@ -1,14 +1,19 @@
 class Randomizer
+    ITEM = {
+        :coin => 1,
+        :die => 2,
+    }
+    SIDES = {
+        :H => 1,
+        :T => 2,
+    }
+
     def randomize() # both randomizes as well as returns self (for method chaining)
         @num_randomizations += 1
         @up = rand(1..@sides) # .. is inclusive, ... is exclusive
 
-        if self.class == Coin
-            if @up == 1
-                @up = :H
-            elsif @up == 2
-                @up = :T
-            end
+        if self.class.name == "Coin"
+            @up = SIDES.key(@up)
         end
 
         return self
@@ -37,6 +42,7 @@ class Randomizer
         elsif @item == :die # if Die, add :colour
             description[:colour] = @colour
         end
+        # puts "description: #{description}"
         return description
     end
 

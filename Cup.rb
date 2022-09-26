@@ -2,14 +2,16 @@ require './RandomizerContainer.rb'
 
 class Cup < RandomizerContainer
     attr_accessor :randomizers
+    attr_reader :throw_descriptions
 
     def initialize()
         @randomizers = []
+        @throw_descriptions = []
     end
 
     def throw() # each randomizer in the cup is rolled or flipped, and a newly created Results object is returned
         @randomizers.each do |randomizer|
-            randomizer.class.name == "Coin" ? randomizer.flip() : randomizer.roll()
+            randomizer.randomize()
         end
         return Results.new(self)
     end

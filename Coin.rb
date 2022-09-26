@@ -35,4 +35,5 @@ class Coin < Randomizer
     def sideup() # returns :H or :T (the result of the last flip) or nil (if no flips yet done), is a synonym for result()
         return result()
     end
+
 end

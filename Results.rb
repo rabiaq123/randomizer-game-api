@@ -3,6 +3,10 @@ class Results
     def initialize(cup)
         @cup = cup
         @description = nil
+        @randomizer_descriptions = []
+        @cup.randomizers.each do |randomizer|
+            @randomizer_descriptions << randomizer.description
+        end
     end
 
     def description(description) # stores a description from which the Randomizer objects stored in self can be selected when computing the results, tally or sum 
@@ -13,9 +17,9 @@ class Results
         # only include the values from randomizers that match the description stored in the Results.
         # if description() has not yet been called, return the results from all randomizers
         sideup_values = []
-        @cup.randomizers.each do |randomizer|
-            if @description == nil || @description == randomizer.description
-                sideup_values << randomizer.sideup()
+        @randomizer_descriptions.each do |randomizer_description|
+            if @description == nil || @description == randomizer_description
+                sideup_values << randomizer_description[:up]
             end
         end
         return sideup_values
@@ -24,8 +28,8 @@ class Results
     def tally() # returns the number of items in the Results that match the description 
         # if description() has not yet been called, count all randomizers
         num_matches = 0
-        @cup.randomizers.each do |randomizer|
-            if @description == nil || @description == randomizer.description
+        @randomizer_descriptions.each do |randomizer_description|
+            if @description == nil || @description == randomizer_description
                 num_matches += 1
             end
         end
@@ -37,12 +41,12 @@ class Results
         # (for coins, :H = 1 and :T = 0), and returns the value
         # if description() has not yet been called, total the values across all randomizers
         sideup_sum = 0
-        @cup.randomizers.each do |randomizer|
-            if @description == nil || randomizer.description == @description
-                if randomizer.sideup() == :H # no check for :T because it will not affect sideup_sum
+        @randomizer_descriptions.each do |randomizer_description|
+            if @description == nil || @description == randomizer_description
+                if randomizer_description.value?(:H) # no check for :T because it will not affect sideup_sum
                     sideup_sum += 1
-                elsif randomizer.class.name == "Die"
-                    sideup_sum += randomizer.sideup()
+                elsif randomizer_description.value?(:die)
+                    sideup_sum += randomizer_description[:up]
                 end
             end
         end

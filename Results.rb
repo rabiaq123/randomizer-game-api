@@ -9,7 +9,6 @@ class Results
 
     def description(description) # stores a description from which the Randomizer objects stored in self can be selected when computing the results, tally or sum 
         @description = description
-        return nil
     end
 
     def results() # returns array containing the “side-up” values of the randomizers recorded in self
@@ -36,16 +35,15 @@ class Results
     end
 
     def sum()
-        # totals the value of the Randomizer items in the Results that match the description, where the value equals the number that is “up” (for coins, :H = 1 and :T = 0), and returns the value
+        # totals the sideup value of the Randomizer items in the Results that match the description, 
+        # (for coins, :H = 1 and :T = 0), and returns the value
         # if description() has not yet been called, total the values across all randomizers
         sideup_sum = 0
         @cup.randomizers.each do |randomizer|
             if @description == nil || randomizer.description == @description
-                if randomizer.sideup() == :H # did not check for :T because it will not affect sideup_sum
+                if randomizer.sideup() == :H # no check for :T because it will not affect sideup_sum
                     sideup_sum += 1
-                # elsif randomizer.sideup() == :T
-                #     sideup_sum += 2
-                elsif randomizer.sideup().is_a? Integer # for dice
+                elsif randomizer.class.name == "Die"
                     sideup_sum += randomizer.sideup()
                 end
             end

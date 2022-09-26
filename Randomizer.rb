@@ -5,15 +5,16 @@ class Randomizer
     }
     SIDES = {
         :H => 1,
-        :T => 2,
+        :T => 0,
     }
 
     def randomize() # both randomizes as well as returns self (for method chaining)
         @num_randomizations += 1
-        @up = rand(1..@sides) # .. is inclusive, ... is exclusive
 
         if self.class.name == "Coin"
-            @up = SIDES.key(@up)
+            @up = SIDES.key(rand(2)) # between 0 and 1; 0 is :T, 1 is :H
+        elsif self.class.name == "Die"
+            @up = rand(1..@sides) # .. is inclusive, ... is exclusive
         end
 
         return self
@@ -42,7 +43,6 @@ class Randomizer
         elsif @item == :die # if Die, add :colour
             description[:colour] = @colour
         end
-        # puts "description: #{description}"
         return description
     end
 

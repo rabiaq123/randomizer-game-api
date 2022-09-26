@@ -23,6 +23,27 @@ puts "Done"
 puts ""
 
 
+# checking Die methods and attributes for one die
+puts "-------"
+puts "Die.rb"
+die = Die.new(6, :yellow)
+puts "die.item: #{die.item}" # should be die
+puts "die.colour: #{die.colour}"
+puts "die.sides: #{die.sides}"
+puts "die.sideup: #{die.sideup}" # should be nil
+die.roll # use .randomize for method chaining
+puts "-- die rolled!"
+# puts die.up # should give same result as die.sideup
+puts "die.sideup: #{die.sideup}" # should not be nil after roll()
+puts "die.calls: #{die.calls}" # number of times randomize() has been called
+puts "die.description: #{die.description}" # get die description
+die.reset
+puts "-- called reset!"
+puts "die.sideup: #{die.sideup}" # should be nil
+puts "die.description: #{die.description}" # get die description
+puts "Done"
+
+
 # checking select method for multiple items
 puts "-------"
 puts "Checking select method for multiple items in bag"
@@ -95,22 +116,32 @@ puts "Done"
 puts ""
 
 
-# checking Die methods and attributes for one die
+# checking Results methods after cup is thrown
 puts "-------"
-puts "Die.rb"
-die = Die.new(6, :yellow)
-puts "die.item: #{die.item}" # should be die
-puts "die.colour: #{die.colour}"
-puts "die.sides: #{die.sides}"
-puts "die.sideup: #{die.sideup}" # should be nil
-die.roll # use .randomize for method chaining
-puts "-- die rolled!"
-# puts die.up # should give same result as die.sideup
-puts "die.sideup: #{die.sideup}" # should not be nil after roll()
-puts "die.calls: #{die.calls}" # number of times randomize() has been called
-puts "die.description: #{die.description}" # get die description
-die.reset
-puts "-- called reset!"
-puts "die.sideup: #{die.sideup}" # should be nil
-puts "die.description: #{die.description}" # get die description
+puts "Checking Results methods when cup is thrown"
+coin1 = Coin.new 0.25
+coin2 = Coin.new 1
+die1 = Die.new(6, :green)
+die2 = Die.new(3, :blue)
+randomizers = [coin1, coin2, die1, die2]
+puts "-- putting randomizers in hand"
+hand = Hand.new
+cup = Cup.new
+hand.store_all(randomizers)
+# hand.randomizers.each do |randomizer|
+#     puts randomizer.description
+# end
+puts "-- moving randomizers to cup and getting Results values"
+cup.move_all(hand)
+results = cup.throw
+cup.randomizers.each do |randomizer|
+    puts randomizer.description
+end
+# results.description({sides: 2, up: :H, item: :coin, denomination: 0.25}) # if provided, must match randomizer.description exactly to affect results
+puts "-- results:"
+puts "resuts.sum: #{results.sum}"
+puts "resuts.tally: #{results.tally}"
+puts "resuts.results: #{results.results}"
+puts ""
 puts "Done"
+puts ""

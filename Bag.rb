@@ -9,18 +9,16 @@ class Bag < RandomizerContainer
         @randomizers = []
     end
 
-    def move_all(randomizer_container) # override to reset all randomizers once in Bag
-        @randomizers.concat(randomizer_container.randomizers)
-        randomizer_container.randomizers = []
+    def move_all(randomizer_container) # override parent class implementation
+        super
         @randomizers.each do |randomizer|
             randomizer.reset()
         end
-
         return self
     end
 
-    def store_all(randomizers) # override to reset all randomizers once in Bag
-        @randomizers.concat(randomizers)
+    def store_all(randomizers) # override parent class implementation
+        super
         @randomizers.each do |randomizer|
             randomizer.reset()
         end

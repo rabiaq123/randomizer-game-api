@@ -31,17 +31,12 @@ class RandomizerContainer
             amt = @randomizers.length
         end
         # selects items based on the description provided
-        if description.empty?
-            amt.times do
-                hand.store(@randomizers.pop()) # remove last added randomizer and store in hand
-            end
-        else
-            @randomizers.delete_if do |randomizer|
-                if description <= randomizer.description && amt != 0 # if description provided is a subset of randomizer.description
-                    hand.store(randomizer)
-                    amt -= 1
-                    true # remove the randomizer from the array
-                end
+        # if no description provided, delete any 'amt' randomizers from the container
+        @randomizers.delete_if do |randomizer|
+            if description <= randomizer.description && amt != 0 # if description is a subset of randomizer.description
+                hand.store(randomizer)
+                amt -= 1
+                true # remove the randomizer from the array
             end
         end
 

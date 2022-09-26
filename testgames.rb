@@ -23,9 +23,9 @@ puts "Done"
 puts ""
 
 
-# checking select method for multiple coins
+# checking select method for multiple items
 puts "-------"
-puts "Checking select method for multiple coins"
+puts "Checking select method for multiple items in bag"
 coin1 = Coin.new 0.25
 coin2 = Coin.new 1
 coin3 = Coin.new 1
@@ -33,44 +33,61 @@ die1 = Die.new(6, :green)
 die2 = Die.new(3, :blue)
 die3 = Die.new(5, :blue)
 die4 = Die.new(4, :red)
-coin1.flip # use .randomize for method chaining
-coin2.flip # use .randomize for method chaining
-coin3.flip # use .randomize for method chaining
-die1.roll # use .randomize for method chaining
-die2.roll # use .randomize for method chaining
-die3.roll # use .randomize for method chaining
-die4.roll # use .randomize for method chaining
-# puts "-- randomized!"
+randomizers = [coin1, coin2, coin3, die1, die2, die3, die4]
 puts "-- putting randomizers in hand"
 bag = Bag.new
 hand = Hand.new
-randomizers = [coin1, coin2, coin3, die1, die2, die3, die4]
-# randomizers.each do |randomizer|
-#   puts randomizer.description
-# end
-# puts ""
 hand.store_all(randomizers)
-hand.randomizers.each do |randomizer|
-  puts randomizer.description
-end
-puts ""
-puts "-- randomizers in bag"
-bag.move_all(hand)
-# bag.randomizers.each do |randomizer|
+hand.randomizers.each { |randomizer| randomizer.randomize }
+# hand.randomizers.each do |randomizer|
 #   puts randomizer.description
 # end
-# puts ""
-# puts "-- randomizers still in hand"
-# puts hand.randomizers
-# puts ""
-puts "-- selecting"
-hand = bag.select({item: :die, sides: 6}, :all) 
+puts "-- moving randomizers to bag"
+bag.move_all(hand)
+puts "-- selecting from bag"
+hand = bag.select({item: :coin, up: :H}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
   puts randomizer.description
 end
 puts "items left:"
 bag.randomizers.each do |randomizer|
+  puts randomizer.description
+end
+puts ""
+puts "Done"
+puts ""
+
+
+# checking select method for multiple items
+puts "-------"
+puts "Checking select method for multiple items in cup"
+coin1 = Coin.new 0.25
+coin2 = Coin.new 1
+coin3 = Coin.new 1
+die1 = Die.new(6, :green)
+die2 = Die.new(3, :blue)
+die3 = Die.new(5, :blue)
+die4 = Die.new(4, :red)
+randomizers = [coin1, coin2, coin3, die1, die2, die3, die4]
+puts "-- putting randomizers in hand"
+hand = Hand.new
+cup = Cup.new
+hand.store_all(randomizers)
+# hand.randomizers.each do |randomizer|
+#     puts randomizer.description
+# end
+puts "-- moving randomizers to cup"
+cup.move_all(hand)
+cup.throw
+puts "-- selecting"
+hand = cup.select({item: :coin, up: :H}, :all) 
+puts "items selected:"
+hand.randomizers.each do |randomizer|
+  puts randomizer.description
+end
+puts "items left:"
+cup.randomizers.each do |randomizer|
   puts randomizer.description
 end
 puts ""

@@ -1,5 +1,4 @@
 require './RandomizerContainer.rb'
-require './Results.rb'
 
 class Cup < RandomizerContainer
     attr_accessor :randomizers

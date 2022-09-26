@@ -1,5 +1,3 @@
-require './Cup.rb'
-
 class Results
 
     def initialize(cup)

@@ -49,8 +49,6 @@ class Player
         
         @throw_results.each do |result|
             result.description(description) # set the description
-            # puts "result: #{result}"
-            # puts "result.tally: #{result.tally()}"
             tally_results << result.tally() # store the tallied results
         end
 

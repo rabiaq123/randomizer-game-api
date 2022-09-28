@@ -1,8 +1,6 @@
 require './RandomizerContainer.rb'
 
 class Bag < RandomizerContainer
-    attr_accessor :randomizers
-
     # Bag can contain Coins and Dice
 
     def initialize()

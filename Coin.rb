@@ -1,8 +1,7 @@
 require './Randomizer.rb'
 
 class Coin < Randomizer
-    # all Randomizers have the instance variables 'sides', 'up', and 'item'
-    attr_accessor :sides, :up, :item, :denomination, :num_randomizations
+    attr_accessor :denomination
     DENOMINATION = {
         nickel: 0.05,
         dime: 0.10,

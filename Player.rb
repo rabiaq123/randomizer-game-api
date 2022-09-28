@@ -1,5 +1,5 @@
 class Player
-    attr_reader :bag, :cup, :throw_results
+    attr_reader :bag, :cup
     
     # every Player has a Bag and a Cup
 
@@ -72,7 +72,7 @@ class Player
         idx = -(throw + 1) # negative index values can be used to access elements from the end of the array
 
         # if a throw is requested that doesn’t exist (too far back in time and never occurred), return nil
-        if throw_results[idx] == nil
+        if @throw_results[idx] == nil
             return nil
         end
 

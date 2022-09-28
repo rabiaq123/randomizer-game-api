@@ -1,4 +1,6 @@
 class RandomizerContainer
+    attr_accessor :randomizers
+    
     def store(randomizer) # stores a randomizer in the container, returns self (for method chaining)
         @randomizers << randomizer
         return self

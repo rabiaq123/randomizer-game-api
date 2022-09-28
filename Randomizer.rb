@@ -1,10 +1,9 @@
 class Randomizer
+    attr_accessor :sides, :up, :item, :num_randomizations, :description
     SIDES = {
         :H => 1,
         :T => 0,
     }
-
-    attr_accessor :description
 
     def randomize() # both randomizes as well as returns self (for method chaining)
         @num_randomizations += 1

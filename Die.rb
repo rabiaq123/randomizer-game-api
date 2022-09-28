@@ -1,8 +1,7 @@
 require './Randomizer.rb'
 
 class Die < Randomizer
-    # all Randomizers have the instance variables 'sides', 'up', and 'item'
-    attr_accessor :sides, :up, :item, :colour, :num_randomizations
+    attr_accessor :colour
     COLOUR = {
         :red => "red",
         :green => "green",

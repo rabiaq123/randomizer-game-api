@@ -58,6 +58,7 @@ hand = Hand.new
 cup = Cup.new
 hand.store_all(randomizers)
 hand.randomizers.each do |randomizer|
+    randomizer.randomize
     puts randomizer.description
 end
 puts "-- moving randomizers to cup"
@@ -68,7 +69,7 @@ cup.randomizers.each do |randomizer|
 end
 puts "hand"
 hand.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts "-- emptying cup into hand"
 hand = cup.empty()
@@ -97,6 +98,7 @@ hand = Hand.new
 bag = Bag.new
 hand.store_all(randomizers)
 hand.randomizers.each do |randomizer|
+    randomizer.randomize
     puts randomizer.description
 end
 puts "-- moving randomizers to bag"
@@ -142,7 +144,7 @@ hand = Hand.new
 hand.store_all(randomizers)
 hand.randomizers.each { |randomizer| randomizer.randomize }
 hand.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts "-- moving randomizers to bag"
 bag.move_all(hand)
@@ -150,11 +152,11 @@ puts "-- selecting all coins from bag"
 hand = bag.select({item: :coin}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts "items left:"
 bag.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts ""
 puts "Done"
@@ -187,11 +189,11 @@ puts "-- selecting all :H coins from cup"
 hand = cup.select({item: :coin, up: :H}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts "items left:"
 cup.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
 end
 puts ""
 puts "Done"

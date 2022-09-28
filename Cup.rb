@@ -20,8 +20,7 @@ class Cup < RandomizerContainer
 
     def empty() # returns a Hand object to be returned to the bag, and leaves the cup empty
         hand = Hand.new()
-        hand.randomizers = @randomizers
-        @randomizers = []
+        hand.move_all(self)
         return hand
     end
 

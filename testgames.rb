@@ -74,7 +74,46 @@ puts "-- emptying cup into hand"
 hand = cup.empty()
 puts "cup"
 cup.randomizers.each do |randomizer|
-  puts randomizer.description
+    puts randomizer.description
+end
+puts "hand"
+hand.randomizers.each do |randomizer|
+    puts randomizer.description
+end
+puts ""
+puts "Done"
+coin1, die1 = nil
+puts ""
+
+
+# emptying bag
+puts "-------"
+puts "Checking empty() method in Bag"
+coin1 = Coin.new 0.25
+die1 = Die.new(6, :green)
+randomizers = [coin1, die1]
+puts "-- putting randomizers in hand"
+hand = Hand.new
+bag = Bag.new
+hand.store_all(randomizers)
+hand.randomizers.each do |randomizer|
+    puts randomizer.description
+end
+puts "-- moving randomizers to bag"
+bag.move_all(hand)
+puts "bag"
+bag.randomizers.each do |randomizer|
+    puts randomizer.description
+end
+puts "hand"
+hand.randomizers.each do |randomizer|
+    puts randomizer.description
+end
+puts "-- emptying bag into hand"
+hand = bag.empty()
+puts "bag"
+bag.randomizers.each do |randomizer|
+    puts randomizer.description
 end
 puts "hand"
 hand.randomizers.each do |randomizer|
@@ -102,13 +141,13 @@ bag = Bag.new
 hand = Hand.new
 hand.store_all(randomizers)
 hand.randomizers.each { |randomizer| randomizer.randomize }
-# hand.randomizers.each do |randomizer|
-#   puts randomizer.description
-# end
+hand.randomizers.each do |randomizer|
+  puts randomizer.description
+end
 puts "-- moving randomizers to bag"
 bag.move_all(hand)
-puts "-- selecting from bag"
-hand = bag.select({}, :all) 
+puts "-- selecting all coins from bag"
+hand = bag.select({item: :coin}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
   puts randomizer.description
@@ -144,7 +183,7 @@ hand.store_all(randomizers)
 puts "-- moving randomizers to cup"
 cup.move_all(hand)
 cup.throw
-puts "-- selecting"
+puts "-- selecting all :H coins from cup"
 hand = cup.select({item: :coin, up: :H}, :all) 
 puts "items selected:"
 hand.randomizers.each do |randomizer|
@@ -214,11 +253,13 @@ player.move_all(hand)
 # puts "player.bag.randomizers: #{player.bag.randomizers}"
 # puts "hand.randomizers: #{hand.randomizers}"
 puts "-- loading and throwing randomizers in cup"
-player.load({item: :coin}).throw
+player.load({item: :coin})
+desc = {sides: 2, up: :H, item: :coin, denomination: 1} 
+puts "-- stats criteria: #{desc}"
+player.throw
 player.cup.randomizers.each do |randomizer|
     puts randomizer.description
 end
-desc = {sides: 2, up: :H, item: :coin, denomination: 1} 
 puts "player.sum(): #{player.sum(desc)}" # sum of sideup values of all randomizers in the cup with a matching description
 puts "player.tally(): #{player.tally(desc)}" # number of randomizer descriptions after a throw that match the provided description
 puts "player.results(): #{player.results(desc, 0)}" # sideup values (from a given throw) of all randomizers in the cup matching the provided description
@@ -264,11 +305,13 @@ player.move_all(hand)
 # puts "player.bag.randomizers: #{player.bag.randomizers}"
 # puts "hand.randomizers: #{hand.randomizers}"
 puts "-- loading and throwing randomizers in cup"
-player.load({}).throw
+player.load({})
+desc = {sides: 3, up: 2, item: :die, colour: :blue} 
+puts "-- stats criteria: #{desc}"
+player.throw
 player.cup.randomizers.each do |randomizer|
     puts randomizer.description
 end
-desc = {sides: 3, up: 2, item: :die, colour: :blue} 
 puts "player.sum(): #{player.sum(desc)}" # sum of sideup values of all randomizers in the cup with a matching description
 puts "player.tally(): #{player.tally(desc)}" # number of randomizer descriptions after a throw that match the provided description
 puts "player.results(): #{player.results(desc, 0)}" # sideup values (from a given throw) of all randomizers in the cup matching the provided description
@@ -279,7 +322,7 @@ player.cup.randomizers.each do |randomizer|
 end
 puts "player.sum(): #{player.sum(desc)}" # sum of sideup values of all randomizers in the cup with a matching description
 puts "player.tally(): #{player.tally(desc)}" # number of randomizer descriptions after a throw that match the provided description
-puts "player.results(): #{player.results(desc, 1)}" # sideup values (from a given throw) of all randomizers in the cup matching the provided description
+puts "player.results(): #{player.results(desc, 0)}" # sideup values (from a given throw) of all randomizers in the cup matching the provided description
 puts "throw #3"
 player.throw
 player.cup.randomizers.each do |randomizer|

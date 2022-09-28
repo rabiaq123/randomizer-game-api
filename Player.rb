@@ -1,9 +1,10 @@
 class Player
     attr_reader :bag, :cup, :throw_results
+    
+    # every Player has a Bag and a Cup
 
     def initialize(name)
         @name = name
-        # every Player has a Bag and a Cup
         @bag = Bag.new
         @cup = Cup.new
         @throw_results = []
@@ -60,20 +61,20 @@ class Player
         
         @throw_results.each do |result|
             result.description(description) # set the description
-            sum_arr << result.sum()
+            sum_arr << result.sum() # store the summed results
         end
         
         return sum_arr
     end
 
-    def results(description, throw = 0) # sets the description and returns the result values as an array, where the last Results is “throw=0”, the throw before is “throw=1”, etc
-        # if a throw is requested that doesn’t exist (too far back in time and never occurred), return nil
-        # here, a “throw” is short for “the result of a given throw”
+    def results(description, throw = 0) # sets the description and returns the Result values as an array, where the last Results is “throw=0”, the throw before is “throw=1”, etc
+        # a “throw” is short for “the result of a given throw”
         idx = -(throw + 1) # negative index values can be used to access elements from the end of the array
+
+        # if a throw is requested that doesn’t exist (too far back in time and never occurred), return nil
         if throw_results[idx] == nil
             return nil
         end
-        puts "throw results #{throw_results[idx]}"
 
         @throw_results[idx].description(description) 
         return @throw_results[idx].results()

@@ -16,7 +16,7 @@ class Die < Randomizer
         @colour = COLOUR.key?(colour) && colour || COLOUR.value?(colour) && COLOUR.key(colour)
         @up = nil
         @num_randomizations = 0
-        @item = ITEM.key(2)
+        @item = :die
     end
 
     def colour() # returns the colour of the die (does not set it)
@@ -37,4 +37,9 @@ class Die < Randomizer
         return @up
     end
 
+    def description() # HELPER: get Die instance description
+        description = super # get default description from parent class
+        description[:colour] = @colour
+        return description
+    end
 end

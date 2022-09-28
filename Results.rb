@@ -1,10 +1,9 @@
 class Results
 
     def initialize(cup)
-        @cup = cup
         @description = nil
         @randomizer_descriptions = []
-        @cup.randomizers.each do |randomizer|
+        cup.randomizers.each do |randomizer|
             @randomizer_descriptions << randomizer.description
         end
     end

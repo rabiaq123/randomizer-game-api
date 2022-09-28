@@ -24,7 +24,7 @@ class Player
         return self
     end
 
-    def load(description) # loads items from the player’s bag to the player’s cup based on the description; returns self (for method chaining)
+    def load(description = {}) # loads items from the player’s bag to the player’s cup based on the description; returns self (for method chaining)
         @cup.load(@bag.select(description, :all))
         return self
     end
@@ -35,7 +35,7 @@ class Player
         return @throw_results.last
     end
 
-    def replace(description) # replaces the items selected by the description from the cup into the bag; returns self (for method chaining)
+    def replace(description = {}) # replaces the items selected by the description from the cup into the bag; returns self (for method chaining)
         @bag.move_all(@cup.select(description, :all))
         return self
     end
@@ -45,7 +45,7 @@ class Player
         return self
     end
 
-    def tally(description) # sets the description, and calls tally() on each of the stored results, and returns each of the values within a single array
+    def tally(description = {}) # sets the description, and calls tally() on each of the stored results, and returns each of the values within a single array
         tally_results = []
         
         @throw_results.each do |result|
@@ -56,7 +56,7 @@ class Player
         return tally_results
     end
 
-    def sum(description) # sets the description, and calls sum() on each of the stored results and returns the combined values as an array
+    def sum(description = {}) # sets the description, and calls sum() on each of the stored results and returns the combined values as an array
         sum_arr = []
         
         @throw_results.each do |result|
@@ -67,7 +67,7 @@ class Player
         return sum_arr
     end
 
-    def results(description, throw = 0) # sets the description and returns the Result values as an array, where the last Results is “throw=0”, the throw before is “throw=1”, etc
+    def results(description = {}, throw = 0) # sets the description and returns the Result values as an array, where the last Results is “throw=0”, the throw before is “throw=1”, etc
         # a “throw” is short for “the result of a given throw”
         idx = -(throw + 1) # negative index values can be used to access elements from the end of the array
 

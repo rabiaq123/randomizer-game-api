@@ -25,7 +25,7 @@ class RandomizerContainer
         return self
     end
 
-    def select(description, amt) # returns a Hand object that holds up to 'amt' selected items
+    def select(description, amt = :all) # returns a Hand object that holds up to 'amt' selected items
         hand = Hand.new()
 
         # if all items are desired, the symbol :all will be supplied instead of a number

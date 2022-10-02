@@ -32,8 +32,7 @@ class Die < Randomizer
     end
 
     def sideup() # returns the result of the last roll, or nil (if not rolled), is a synonym for result()
-        @up = result()
-        return @up
+        return result()
     end
 
     def description() # HELPER: get Die instance description

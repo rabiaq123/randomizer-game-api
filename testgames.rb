@@ -2,18 +2,13 @@ require_relative './A1_Classes.rb'
 require "test/unit"
 
 class TestUseCases < Test::Unit::TestCase
-
-    module ColorExtensions
-        {
-            blue: 36
-        }.each do |color, code|
-            define_method color do
-            "\e[#{code}m#{self}\e[0m"
-            end
+    # set text colour when appended with '.blue' to show in terminal
+    module Colours
+        def blue
+            "\e[#{36}m#{self}\e[0m"
         end
     end
-
-    String.include(ColorExtensions)
+    String.include(Colours)
 
     # Use Case 2: Choosing Who Makes the First Move
     def test_uc_2

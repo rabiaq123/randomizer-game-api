@@ -1,14 +1,21 @@
-# CIS3260 (Software Design IV) Assignment 4
+# CIS3260 (Software Design IV) Assignment 1
 
 Ruby Assignment
 
-This assignment asked us to implement classes and methods in Ruby from a given type/interface design provided.
+This assignment asked students to implement classes and methods in Ruby from a given type/interface design provided, and to create tests for them.
 
 ## Author Information
 
 * Name: Rabia Qureshi
 * Student ID: 1046427
 * Email: rqureshi@uoguelph.ca
+
+## Compiling and Running
+
+In the root directory, run the following two commands:
+
+* To run all tests: `ruby testgames.rb`
+* To run an individual test: `ruby testgames.rb -n test_name`
 
 ## Statement of Individual Work
 

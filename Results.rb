@@ -1,7 +1,7 @@
 class Results
 
     def initialize(cup)
-        @description = nil
+        @description = {}
         @randomizer_descriptions = []
         cup.randomizers.each do |randomizer|
             @randomizer_descriptions << randomizer.description
@@ -17,7 +17,7 @@ class Results
         # if description() has not yet been called, return the results from all randomizers
         sideup_values = []
         @randomizer_descriptions.each do |randomizer_description|
-            if @description == nil || @description == randomizer_description
+            if @description == {} || @description == randomizer_description
                 sideup_values << randomizer_description[:up]
             end
         end
@@ -28,7 +28,7 @@ class Results
         # if description() has not yet been called, count all randomizers
         num_matches = 0
         @randomizer_descriptions.each do |randomizer_description|
-            if @description == nil || @description == randomizer_description
+            if @description == {} || @description == randomizer_description
                 num_matches += 1
             end
         end
@@ -41,7 +41,7 @@ class Results
         # if description() has not yet been called, total the values across all randomizers
         sideup_sum = 0
         @randomizer_descriptions.each do |randomizer_description|
-            if @description == nil || @description == randomizer_description
+            if @description == {} || @description == randomizer_description
                 if randomizer_description.value?(:H) # no check for :T because it will not affect sideup_sum
                     sideup_sum += 1
                 elsif randomizer_description.value?(:die)

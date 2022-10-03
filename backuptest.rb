@@ -297,9 +297,9 @@ puts ""
 puts "-------"
 puts "Player class implementation with Dice"
 die1 = Die.new(3, :blue)
-die2 = Die.new(3, :blue)
-die3 = Die.new(3, :blue)
-die4 = Die.new(3, :blue)
+die2 = Die.new(3, :green)
+die3 = Die.new(3, :red)
+die4 = Die.new(3, :yellow)
 randomizers = [die1, die2, die3, die4]
 puts "-- putting randomizers in hand"
 player = Player.new("Rabia")
@@ -314,7 +314,8 @@ player.move_all(hand)
 # puts "hand.randomizers: #{hand.randomizers}"
 puts "-- loading and throwing randomizers in cup"
 player.load({})
-desc = {sides: 3, up: 2, item: :die, colour: :blue} 
+# desc = {sides: 3, up: 2, item: :die, colour: :blue} 
+desc = {} 
 puts "-- stats criteria: #{desc}"
 player.throw
 player.cup.randomizers.each do |randomizer|

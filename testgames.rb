@@ -377,33 +377,159 @@ class TestUseCases < Test::Unit::TestCase
 end
 
 
-class TestOther < Test::Unit::TestCase
+class TestUnusedMethods < Test::Unit::TestCase
 
-    # checking Coin methods and attributes for one coin
-    def test_coin_flip
-        puts "\nTesting Coin class methods and attributes\n"
+    # checking unused Coin methods
+    def test_coin_methods
+        puts "\nTesting unused Coin class methods\n"
 
         coin = Coin.new 0.25
-        assert_equal(coin.item, :coin, "coin.item should return coin")
-        assert_equal(coin.denomination, 0.25, "Denomination should be 0.25")
-        assert_equal(coin.sides, 2, "Coin should have two sides by default")
-        assert_equal(coin.num_randomizations, 0, "num_randomizations should be 0 on Coin instatntiation")
 
         puts "\tBefore flipping coin..."
+        puts "\t\tcoin.sideup()" + " EXPECTED: ".blue + "nil;" + " RECEIVED: ".blue + "#{coin.sideup == nil ? 'nil' : coin.sideup}"
         assert_equal(coin.sideup(), nil, "coin.sideup should return nil if the coin has not been flipped yet")
-        puts "\t#{coin.description}"
+        puts "\t\tcoin.calls()" + " EXPECTED: ".blue + "0;" + " RECEIVED: ".blue + "#{coin.calls}"
+        assert_equal(coin.denomination, 0.25, "Denomination should be 0.25")
+        puts "\t\tcoin.denomination()" + " EXPECTED: ".blue + "0.25;" + " RECEIVED: ".blue + "#{coin.denomination}"
+        assert_equal(coin.calls(), 0, "Number of randomizations should be 0 on Coin instatntiation")
+        puts "\t\t#{coin.description}"
 
         puts "\tFlipping coin..."
         coin.flip
-        assert_not_nil(coin.sideup(), "coin.sideup should return :H or :T after coin is flipped")
-        assert_equal(coin.calls(), 1, "coin.calls should return 1 since coin.flip was called once")
-        puts "\t#{coin.description}"
+        puts "\t\tcoin.sideup()" + " EXPECTED: ".blue + "H or T;" + " RECEIVED: ".blue + "#{coin.sideup}"
+        assert_not_nil(coin.sideup(), "coin.sideup() should return :H or :T after coin is flipped")
+        puts "\t\tcoin.calls()" + " EXPECTED: ".blue + "1;" + " RECEIVED: ".blue + "#{coin.calls}"
+        assert_equal(coin.calls(), 1, "coin.calls() should return 1 since coin.flip was called once")
+        puts "\t\t#{coin.description}"
+    end
 
-        puts "\tResetting coin..."
-        coin.reset
-        assert_equal(coin.sideup(), nil, "coin.sideup should return nil after coin.reset")
-        assert_equal(coin.calls(), 0, "coin.calls should return 0 after coin.reset")
-        puts "\t#{coin.description}"
+    # checking unused Die methods
+    def test_die_methods
+        puts "\nTesting unused Die class methods\n"
+
+        die = Die.new(6, :red)
+
+        puts "\tBefore rolling die..."
+        puts "\t\tdie.sideup()" + " EXPECTED: ".blue + "nil;" + " RECEIVED: ".blue + "#{die.sideup == nil ? 'nil' : die.sideup}"
+        assert_equal(die.sideup(), nil, "die.sideup should return nil if the die has not been rolled yet")
+        puts "\t\tdie.sides()" + " EXPECTED: ".blue + "6;" + " RECEIVED: ".blue + "#{die.sides}"
+        assert_equal(die.sides(), 6, "die.sideup() should return nil if the die has not been rolled yet")
+        puts "\t\tdie.colour()" + " EXPECTED: ".blue + ":red;" + " RECEIVED: ".blue + "#{die.colour}"
+        assert_equal(die.colour(), :red, "die.colour() should return :red")
+        puts "\t\tdie.calls()" + " EXPECTED: ".blue + "0;" + " RECEIVED: ".blue + "#{die.calls}"
+        assert_equal(die.calls, 0, "die.calls() should return 0 on Die instantiation")
+        puts "\t\t#{die.description}"
+
+        puts "\tRolling die..."
+        die.roll
+        puts "\t\tdie.sideup()" + " EXPECTED: ".blue + "1-6;" + " RECEIVED: ".blue + "#{die.sideup}"
+        assert_not_nil(die.sideup(), "die.sideup() should return a number between 1 and 6 after die is rolled")
+        puts "\t\tdie.calls()" + " EXPECTED: ".blue + "1;" + " RECEIVED: ".blue + "#{die.calls}"
+        assert_equal(die.calls(), 1, "die.calls() should return 1 since die.roll was called once")
+        puts "\t\t#{die.description}"
+    end
+
+    # checking unused Player methods
+    def test_player_methods
+        puts "\nTesting Player class methods\n"
+
+        # create all players
+        puts "\tCreating a player"
+        player = Player.new("Player")
+        # create player coins
+        puts "\tCreating two quarters for player"
+        coin1 = Coin.new(0.25)
+        coin2 = Coin.new(0.25)
+
+        # put players' coins in their bags
+        puts "\tPutting 's coin in Player's bag"
+        player.store(coin1)
+        player.store(coin2)
+        # transfer coins from players' bags to the cup
+        puts "\tTransferring Player's coins from their bag to their cup"
+        player.load
+
+        # flip all coins three times
+        puts "\tFlipping each coin three times"
+        sum_values = []
+        3.times do
+            puts "\t\tFlipping coins..."
+            player.throw
+            player.cup.randomizers.each do |randomizer|
+                puts "\t\t#{randomizer.description}"
+            end
+            coin1_value = coin2_value = 0
+            # convert coin values to 1 or 0
+            if coin1.sideup == :H
+                coin1_value = 1
+            end
+            if coin2.sideup == :H
+                coin2_value = 1
+            end
+            # store sum of coin values in array to test
+            sum_values << coin1_value + coin2_value
+        end
+        result_values = [coin1.sideup, coin2.sideup]
+
+        # get results of all coin flips
+        puts "\tGetting results of all coin flips"
+        puts "\t\tplayer.sum({})" + " EXPECTED: ".blue + "#{sum_values}" + " RECEIVED: ".blue + "#{player.sum({})}"
+        assert_equal(player.sum({}), sum_values, "player.sum() should return an array of the sum of all coin flip values for each coin flip")
+        puts "\t\tplayer.results({}, 0)" + " EXPECTED: ".blue + "#{result_values}" + " RECEIVED: ".blue + "#{player.results({}, 0)}"
+        assert_equal(player.results({}, 0), result_values, "player.results({}. 0) should return an array of all coin flip values for the last coin flip")
+    end
+
+    # checking unused Bag methods
+    def test_bag_methods
+        puts "\nTesting Bag class methods\n"
+
+        # create a player
+        puts "\tCreating a player"
+        player = Player.new("Player")
+        # create player coins
+        puts "\tCreating two quarters for player and storing in 'coins' array"
+        coin1 = Coin.new(0.25)
+        coin2 = Coin.new(0.25)
+        coins = [coin1, coin2]
+
+        # put players' coins in their bags
+        puts "\tPutting coins in Player's bag"
+        player.bag.store_all(coins)
+        puts "\t\tNum randomizers in bag" + " EXPECTED: ".blue + "2" + " RECEIVED: ".blue + "#{player.bag.randomizers.length}"
+        assert_equal(player.bag.randomizers.length, 2, "Player's bag should have 2 randomizers in it")
+        puts "\t\tNum randomizers in 'coins' array" + " EXPECTED: ".blue + "2" + " RECEIVED: ".blue + "#{coins.length}"
+        assert_equal(coins.length, 2, "'coins' array should still have 2 randomizers in it")
+    end
+
+    # checking unused Hand methods
+    def test_hand_methods
+        puts "\nTesting Hand class methods\n"
+
+        # create a player
+        puts "\tCreating a player"
+        player = Player.new("Player")
+        # create player coins
+        puts "\tCreating two quarters for player and storing in 'coins' array"
+        coin1 = Coin.new(0.25)
+        coin2 = Coin.new(2)
+        coins = [coin1, coin2]
+        # creating a hand
+        puts "\tCreating a hand"
+        hand = Hand.new
+
+        # put coins in player's hand
+        puts "\tStoring coins in hand"
+        hand.store_all(coins)
+        puts "\t\tNum randomizers in hand" + " EXPECTED: ".blue + "2" + " RECEIVED: ".blue + "#{hand.randomizers.length}"
+        assert_equal(hand.randomizers.length, 2, "Hand should have 2 randomizers in it")
+        
+        # remove last added coin from Hand
+        puts "\tRemoving last added coin from hand"
+        removed_coin = hand.next()
+        puts "\t\tNum randomizers in hand" + " EXPECTED: ".blue + "1" + " RECEIVED: ".blue + "#{hand.randomizers.length}"
+        assert_equal(hand.randomizers.length, 1, "Hand should have 1 randomizer in it")
+        puts "\t\tRemoved coin description" + " EXPECTED: ".blue + "#{coin2.description}" + " RECEIVED: ".blue + "#{removed_coin.description}"
+        assert_equal(removed_coin.description, coin2.description, "Removed coin should be the last coin added to the hand")
     end
 
 end

@@ -1,8 +1,19 @@
 require_relative './A1_Classes.rb'
 require "test/unit"
-require 'colorize' # run 'gem install colorize' to view colours in terminal
 
 class TestUseCases < Test::Unit::TestCase
+
+    module ColorExtensions
+        {
+            blue: 36
+        }.each do |color, code|
+            define_method color do
+            "\e[#{code}m#{self}\e[0m"
+            end
+        end
+    end
+
+    String.include(ColorExtensions)
 
     # Use Case 2: Choosing Who Makes the First Move
     def test_uc_2
@@ -81,30 +92,29 @@ class TestUseCases < Test::Unit::TestCase
         assert(coin1.sideup == :H || coin1.sideup == :T, "Coin 1 should have a sideup value of :H or :T")
         assert(coin2.sideup == :H || coin2.sideup == :T, "Coin 2 should have a sideup value of :H or :T")
         assert(coin3.sideup == :H || coin3.sideup == :T, "Coin 3 should have a sideup value of :H or :T")
-        
+
         # get results of all coin flips
         puts "\tGetting results of all coin flips"
         desc = {sides: 2, up: :H, item: :coin, denomination: 0.25}
-        # .tally() returns the a tally hash of how many of each element are present 
-        puts "\tPlayer 1 tally results: #{player1.tally(desc).tally()}"
-        puts "\tPlayer 2 tally results: #{player2.tally(desc).tally()}"
-        puts "\tPlayer 3 tally results: #{player3.tally(desc).tally()}"
+        puts "\t\tPlayer 1 tally results: #{player1.tally(desc)}"
+        puts "\t\tPlayer 2 tally results: #{player2.tally(desc)}"
+        puts "\t\tPlayer 3 tally results: #{player3.tally(desc)}"
 
         # clearing all tally results
         puts "\tClearing all tally results"
         player1.clear
         player2.clear
         player3.clear
-        puts "\t\tPlayer 1's tally" + " EXPECTED ".blue + "{}" + " RECEIVED: ".blue + "#{player1.tally(desc).tally()}"
-        puts "\t\tPlayer 2's tally" + " EXPECTED ".blue + "{}" + " RECEIVED: ".blue + "#{player2.tally(desc).tally()}"
-        puts "\t\tPlayer 3's tally" + " EXPECTED ".blue + "{}" + " RECEIVED: ".blue + "#{player3.tally(desc).tally()}"
-        assert_equal(player1.tally(desc).tally(), {}, "Player 1's tally should be empty")
-        assert_equal(player2.tally(desc).tally(), {}, "Player 2's tally should be empty")
-        assert_equal(player3.tally(desc).tally(), {}, "Player 3's tally should be empty")
+        puts "\t\tPlayer 1's tally" + " EXPECTED ".blue + "[]" + " RECEIVED: ".blue + "#{player1.tally(desc)}"
+        puts "\t\tPlayer 2's tally" + " EXPECTED ".blue + "[]" + " RECEIVED: ".blue + "#{player2.tally(desc)}"
+        puts "\t\tPlayer 3's tally" + " EXPECTED ".blue + "[]" + " RECEIVED: ".blue + "#{player3.tally(desc)}"
+        assert_equal(player1.tally(desc), [], "Player 1's tally should be empty")
+        assert_equal(player2.tally(desc), [], "Player 2's tally should be empty")
+        assert_equal(player3.tally(desc), [], "Player 3's tally should be empty")
     end
-    
+
     # Use Case 3: Advancing in Spots on a Game Board
-    def test_uc_3 
+    def test_uc_3
         puts "\n\nTesting Use Case 3: Advancing in Spots on a Game Board\n"
 
         # create all players
@@ -186,7 +196,7 @@ class TestUseCases < Test::Unit::TestCase
         assert(die2.sideup >= 1 && die2.sideup <= 6, "Die 2 should have a sideup value between 1 and 6")
         assert(die3.sideup >= 1 && die3.sideup <= 6, "Die 3 should have a sideup value between 1 and 6")
         assert(die4.sideup >= 1 && die4.sideup <= 6, "Die 4 should have a sideup value between 1 and 6")
-        
+
         # get results of all player rolls
         puts "\tGetting Player 1 and Player 2's dice results"
         puts "\t\tplayer1: #{die1.sideup} + #{die2.sideup} = #{die1.sideup + die2.sideup}"
@@ -303,7 +313,7 @@ class TestUseCases < Test::Unit::TestCase
         assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:blue} == die2.description, "Die is missing necessary attributes")
         assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:red} == die3.description, "Die is missing necessary attributes")
         assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:yellow} == die4.description, "Die is missing necessary attributes")
-        
+
         # put dice in Player 1's hand
         puts "\tPutting dice in Player 1's hand"
         p1_hand = Hand.new
@@ -344,7 +354,7 @@ class TestUseCases < Test::Unit::TestCase
             puts "\t\tNum die rolls" + " EXPECTED: ".blue + "1;" + " RECEIVED: ".blue + "#{player1.cup.randomizers[0].calls}"
             assert_equal(player1.cup.randomizers[0].calls, 1, "Die should have been rolled 1 time")
             puts "\t\tSideup value of Player 1's die is not out of range" + " EXPECTED: ".blue + "true;" + " RECEIVED: ".blue + "#{player1.cup.randomizers[0].sideup >= 1 && player1.cup.randomizers[0].sideup <= player1.cup.randomizers[0].sides}"
-            assert(player1.cup.randomizers[0].sideup >= 1 && player1.cup.randomizers[0].sideup <= player1.cup.randomizers[0].sides, "Die should have a sideup value between 1 and #{player1.cup.randomizers[0].sides}")           
+            assert(player1.cup.randomizers[0].sideup >= 1 && player1.cup.randomizers[0].sideup <= player1.cup.randomizers[0].sides, "Die should have a sideup value between 1 and #{player1.cup.randomizers[0].sides}")
             # get results of Player 1's roll
             puts "\t\tPlayer 1's roll result: #{player1.cup.randomizers[0].sideup}"
             if player1.cup.randomizers[0].sideup == die_criteria[:up]
@@ -358,8 +368,8 @@ class TestUseCases < Test::Unit::TestCase
         if tie_broken == false
             puts "\tPlayer 1's die did not match desired description"
             puts "\t\tPlayer 1's die: #{player1.cup.randomizers[0].description}"
-            puts "\tPlayer 1's turn is over"   
-            
+            puts "\tPlayer 1's turn is over"
+
             # Player 1 puts die back in bag and shares bag with Player 2
             puts "\tPlayer 1 places die back in shared bag for Player 2's turn"
             player1.replace
@@ -522,7 +532,7 @@ class TestUnusedMethods < Test::Unit::TestCase
         hand.store_all(coins)
         puts "\t\tNum randomizers in hand" + " EXPECTED: ".blue + "2" + " RECEIVED: ".blue + "#{hand.randomizers.length}"
         assert_equal(hand.randomizers.length, 2, "Hand should have 2 randomizers in it")
-        
+
         # remove last added coin from Hand
         puts "\tRemoving last added coin from hand"
         removed_coin = hand.next()

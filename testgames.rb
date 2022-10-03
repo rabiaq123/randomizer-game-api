@@ -69,13 +69,23 @@ class TestUseCases < Test::Unit::TestCase
         puts "\tplayer1.tally: #{player1.tally(desc).tally()}"
         puts "\tplayer2.tally: #{player2.tally(desc).tally()}"
         puts "\tplayer3.tally: #{player3.tally(desc).tally()}"
+
+        # clearing all tally results
+        puts "\tClearing all tally results"
+        player1.clear
+        player2.clear
+        player3.clear
+        assert_equal(player1.tally(desc).tally(), {}, "Player 1's tally should be empty")
+        assert_equal(player2.tally(desc).tally(), {}, "Player 2's tally should be empty")
+        assert_equal(player3.tally(desc).tally(), {}, "Player 3's tally should be empty")
     end
     
+    # Use Case 3: Advancing in Spots on a Game Board
     def test_uc_3 
         puts "\n\nTesting Use Case 3: Advancing in Spots on a Game Board\n"
 
         # create all players
-        puts "\tCreating 'Player 1', 'Player 2', and 'Player 3'"
+        puts "\tCreating 'Player 1' and 'Player 2'"
         player1 = Player.new("Player 1")
         player2 = Player.new("Player 2")
         assert_equal(player1.name, "Player 1", "Player 1 should have name Player 1")
@@ -104,13 +114,11 @@ class TestUseCases < Test::Unit::TestCase
         puts "\tPutting each player's dice in their bag"
         player1.move_all(p1_hand)
         player2.move_all(p2_hand)
-        p1_bag = player1.bag
-        p2_bag = player2.bag
         # ensure randomizers are in bag
-        assert_equal(p1_bag.randomizers.count, 2, "Player 1's bag should have 2 dice")
-        assert_equal(p2_bag.randomizers.count, 2, "Player 2's bag should have 2 dice")
-        assert(p1_bag.randomizers[0].sideup == nil && p1_bag.randomizers[1].sideup == nil, "Dice should not have a sideup value in bag")
-        assert(p2_bag.randomizers[0].sideup == nil && p2_bag.randomizers[1].sideup == nil, "Dice should not have a sideup value in bag")
+        assert_equal(player1.bag.randomizers.count, 2, "Player 1's bag should have 2 dice")
+        assert_equal(player2.bag.randomizers.count, 2, "Player 2's bag should have 2 dice")
+        assert(player1.bag.randomizers[0].sideup == nil && player1.bag.randomizers[1].sideup == nil, "Dice should not have a sideup value in bag")
+        assert(player2.bag.randomizers[0].sideup == nil && player2.bag.randomizers[1].sideup == nil, "Dice should not have a sideup value in bag")
         # ensure randomizers are no longer in hand
         assert_equal(p1_hand.randomizers, [], "Player 1's hand should be empty")
         assert_equal(p2_hand.randomizers, [], "Player 2's hand should be empty")
@@ -118,10 +126,10 @@ class TestUseCases < Test::Unit::TestCase
         # transfer coins from players' bags to the cup
         puts "\tTransferring each player's dice from their bag to thier cup"
         player1.load
-        assert_equal(p1_bag.randomizers, [], "Player 1's bag should be empty")
+        assert_equal(player1.bag.randomizers, [], "Player 1's bag should be empty")
         assert_not_equal(player1.cup.randomizers, [], "Player 1's cup should not be empty")
         player2.load
-        assert_equal(p2_bag.randomizers, [], "Player 2's bag should be empty")
+        assert_equal(player2.bag.randomizers, [], "Player 2's bag should be empty")
         assert_not_equal(player2.cup.randomizers, [], "Player 2's cup should not be empty")
 
         # roll dice in cup
@@ -129,10 +137,10 @@ class TestUseCases < Test::Unit::TestCase
         player1.throw
         player2.throw
         # expect dice to be rolled once
-        assert_equal(die1.calls, 1, "Die 1 should have been flipped once")
-        assert_equal(die2.calls, 1, "Die 2 should have been flipped once")
-        assert_equal(die3.calls, 1, "Die 3 should have been flipped once")
-        assert_equal(die4.calls, 1, "Die 4 should have been flipped once")
+        assert_equal(die1.calls, 1, "Die 1 should have been rolled once")
+        assert_equal(die2.calls, 1, "Die 2 should have been rolled once")
+        assert_equal(die3.calls, 1, "Die 3 should have been rolled once")
+        assert_equal(die4.calls, 1, "Die 4 should have been rolled once")
         assert(die1.sideup >= 1 && die1.sideup <= 6, "Die 1 should have a sideup value between 1 and 6")
         assert(die2.sideup >= 1 && die2.sideup <= 6, "Die 2 should have a sideup value between 1 and 6")
         assert(die3.sideup >= 1 && die3.sideup <= 6, "Die 3 should have a sideup value between 1 and 6")
@@ -142,9 +150,91 @@ class TestUseCases < Test::Unit::TestCase
         puts "\tGetting Player 1 and Player 2's dice results"
         puts "\tplayer1: #{die1.sideup} + #{die2.sideup} = #{die1.sideup + die2.sideup}"
         puts "\tplayer2: #{die3.sideup} + #{die4.sideup} = #{die3.sideup + die4.sideup}"
+
+        # empty Player cups
+        puts "\tEmptying Player 1 and Player 2's cups"
+        player1.cup.empty
+        player2.cup.empty
+        assert_equal(player1.cup.randomizers, [], "Player 1's cup should be empty")
+        assert_equal(player2.cup.randomizers, [], "Player 2's cup should be empty")
+    end
+
+    # Use Case 4: Getting two turns in a row
+    def test_uc_4
+        puts "\n\nTesting Use Case 4: Getting two turns in a row\n"
+
+        # create all players
+        puts "\tCreating 'Player 1' and 'Player 2'"
+        player1 = Player.new("Player 1")
+        player2 = Player.new("Player 2")
+        assert_equal(player1.name, "Player 1", "Player 1 should have name Player 1")
+        assert_equal(player2.name, "Player 2", "Player 2 should have name Player 2")
+        # create die for players to share
+        puts "\tCreating two dice for Player 1 to store in bag"
+        die = Die.new(6, :yellow)
+        die2 = Die.new(4, :blue)
+        assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow} == die.description, "Die is missing necessary attributes")
+        assert({:sides=>4, :up=>nil, :item=>:die, :colour=>:blue} == die2.description, "Die is missing necessary attributes")
+
+        # put players' dice in thier hands
+
+        # put die in Player 1's hand
+        puts "\tPutting die in Player 1's hand"
+        p1_hand = Hand.new
+        p1_hand.store(die)
+        assert(p1_hand.randomizers.length == 1, "Player 1's hand should have 1 die")
+
+        # put die in Player 1's coins in thier bags
+        puts "\tPutting die in Player 1's bag"
+        player1.move_all(p1_hand)
+        # ensure randomizer is in bag and no longer in hand
+        assert_equal(player1.bag.randomizers.count, 1, "Player 1's bag should have 1 die")
+        assert_equal(p1_hand.randomizers, [], "Player 1's hand should be empty after moving die to bag")
+
+        # transfer coins from players' bags to the cup
+        puts "\tTransferring the die from Player 1's bag to thier cup"
+        player1.load
+        assert_equal(player1.bag.randomizers, [], "Player 1's bag should be empty")
+        assert_not_equal(player1.cup.randomizers, [], "Player 1's cup should not be empty")
+
+        # Player 1 rolls die in cup
+        player1_turn = true
+        num_calls = 0
+        while player1_turn
+            num_calls += 1
+            puts "\tRolling die"
+            player1.throw
+            # expect die to be rolled once
+            assert_equal(die.calls, num_calls, "Die should have been #{num_calls} time(s)")
+            assert(die.sideup >= 1 && die.sideup <= 6, "Die should have a sideup value between 1 and 6")
+            
+            # get results of Player 1's roll
+            puts "\tPlayer 1's roll result: #{die.sideup} out of #{die.sides}"
+            if die.sideup == die.sides
+                puts "\tPlayer 1 gets another turn"
+            else
+                puts "\tPlayer 1's turn is over"
+                player1_turn = false
+            end
+        end
+
+        # Player 2 picks die up
+        puts "\tPutting die in Player 2's hand"
+        p1_hand = player1.cup.empty
+        p1_hand.empty
+        p2_hand = Hand.new
+        p2_hand.store(die)
+        assert(player1.cup.randomizers == [] && p1_hand.randomizers == [], "Player 1's hand and cup should be empty")
+        assert_equal(p2_hand.randomizers.count, 1, "Player 2's hand should have 1 die")
+    end
+
+    # Use Case 5: Breaking a tie
+    def test_uc_5
+
     end
 
 end
+
 
 class TestOther < Test::Unit::TestCase
 
@@ -158,17 +248,17 @@ class TestOther < Test::Unit::TestCase
         assert_equal(coin.sides, 2, "Coin should have two sides by default")
         assert_equal(coin.num_randomizations, 0, "num_randomizations should be 0 on Coin instatntiation")
 
-        puts "\tbefore flipping coin..."
+        puts "\tBefore flipping coin..."
         assert_equal(coin.sideup(), nil, "coin.sideup should return nil if the coin has not been flipped yet")
         puts "\t#{coin.description}"
 
-        puts "\tflipping coin..."
+        puts "\tFlipping coin..."
         coin.flip
         assert_not_nil(coin.sideup(), "coin.sideup should return :H or :T after coin is flipped")
         assert_equal(coin.calls(), 1, "coin.calls should return 1 since coin.flip was called once")
         puts "\t#{coin.description}"
 
-        puts "\tresetting coin..."
+        puts "\tResetting coin..."
         coin.reset
         assert_equal(coin.sideup(), nil, "coin.sideup should return nil after coin.reset")
         assert_equal(coin.calls(), 0, "coin.calls should return 0 after coin.reset")

@@ -66,9 +66,9 @@ class TestUseCases < Test::Unit::TestCase
         puts "\tGetting results of all coin flips"
         desc = {sides: 2, up: :H, item: :coin, denomination: 0.25}
         # .tally() returns the a tally hash of how many of each element are present 
-        puts "\tplayer1.tally: #{player1.tally(desc).tally()}"
-        puts "\tplayer2.tally: #{player2.tally(desc).tally()}"
-        puts "\tplayer3.tally: #{player3.tally(desc).tally()}"
+        puts "\tPlayer 1 tally results: #{player1.tally(desc).tally()}"
+        puts "\tPlayer 2 tally results: #{player2.tally(desc).tally()}"
+        puts "\tPlayer 3 tally results: #{player3.tally(desc).tally()}"
 
         # clearing all tally results
         puts "\tClearing all tally results"
@@ -172,9 +172,7 @@ class TestUseCases < Test::Unit::TestCase
         # create die for players to share
         puts "\tCreating two dice for Player 1 to store in bag"
         die = Die.new(6, :yellow)
-        die2 = Die.new(4, :blue)
         assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow} == die.description, "Die is missing necessary attributes")
-        assert({:sides=>4, :up=>nil, :item=>:die, :colour=>:blue} == die2.description, "Die is missing necessary attributes")
 
         # put players' dice in thier hands
 
@@ -207,9 +205,9 @@ class TestUseCases < Test::Unit::TestCase
             # expect die to be rolled once
             assert_equal(die.calls, num_calls, "Die should have been #{num_calls} time(s)")
             assert(die.sideup >= 1 && die.sideup <= 6, "Die should have a sideup value between 1 and 6")
-            
             # get results of Player 1's roll
             puts "\tPlayer 1's roll result: #{die.sideup} out of #{die.sides}"
+
             if die.sideup == die.sides
                 puts "\tPlayer 1 gets another turn"
             else
@@ -230,6 +228,81 @@ class TestUseCases < Test::Unit::TestCase
 
     # Use Case 5: Breaking a tie
     def test_uc_5
+        puts "\n\nTesting Use Case 5: Breaking a tie\n"
+
+        # create all players
+        puts "\tCreating 'Player 1' and 'Player 2'"
+        player1 = Player.new("Player 1")
+        player2 = Player.new("Player 2")
+        assert_equal(player1.name, "Player 1", "Player 1 should have name Player 1")
+        assert_equal(player2.name, "Player 2", "Player 2 should have name Player 2")
+        # create dice for players to share
+        puts "\tCreating two dice for Player 1 to store in bag"
+        die1 = Die.new(5, :green)
+        die2 = Die.new(5, :blue)
+        die3 = Die.new(5, :red)
+        die4 = Die.new(5, :yellow)
+        assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:green} == die1.description, "Die is missing necessary attributes")
+        assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:blue} == die2.description, "Die is missing necessary attributes")
+        assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:red} == die3.description, "Die is missing necessary attributes")
+        assert({:sides=>5, :up=>nil, :item=>:die, :colour=>:yellow} == die4.description, "Die is missing necessary attributes")
+        
+        # put dice in Player 1's hand
+        puts "\tPutting dice in Player 1's hand"
+        p1_hand = Hand.new
+        randomizers = [die4, die1, die2, die3]
+        p1_hand.store_all(randomizers)
+        assert(p1_hand.randomizers.length == 4, "Player 1's hand should have 4 dice")
+
+        # put dice in Player 1's shared bag
+        puts "\tPlacing dice in Player 1's bag"
+        player1.move_all(p1_hand)
+        # ensure randomizer is in bag and no longer in hand
+        assert_equal(player1.bag.randomizers.count, 4, "Player 1's bag should have 4 dice")
+        assert_equal(p1_hand.randomizers, [], "Player 1's hand should be empty after moving dice to bag")
+
+        # put die in Player 1's cup
+        puts "\tRandomly picking and placing one die in Player 1's cup"
+        player1.load_some({}, 1)
+        # ensure randomizer is in bag and no longer in hand
+        assert_equal(player1.cup.randomizers.count, 1, "Player 1's cup should have 1 die")
+        assert_equal(player1.bag.randomizers.count, 3, "Player 1's bag should have 3 dice")
+
+        # setting desired die conditions
+        die_criteria = {:up=>3, :colour=>:yellow}
+        puts "\tDesired die is yellow and lands on 3"
+
+        # Player 1 rolls die in cup
+        tie_broken = false
+        if player1.cup.randomizers[0].colour == die_criteria[:colour]
+            puts "\tPlayer 1's die is desired colour"
+            puts "\tRolling die"
+            player1.throw
+            # expect die to be rolled once
+            assert(player1.cup.randomizers[0].sideup >= 1 && player1.cup.randomizers[0].sideup <= player1.cup.randomizers[0].sides, "Die should have a sideup value between 1 and #{player1.cup.randomizers[0].sides}")           
+
+            # get results of Player 1's roll
+            puts "\tPlayer 1's roll result: #{player1.cup.randomizers[0].sideup}"
+            if player1.cup.randomizers[0].sideup == die_criteria[:up]
+                puts "\tPlayer 1's die landed on desired value"
+                puts "\tPlayer 1 broke the tie"
+                tie_broken = true
+            end
+        end
+
+        # Player 2's turn
+        if tie_broken == false
+            puts "\tPlayer 1's die did not match desired description"
+            puts "\tPlayer 1's die: #{player1.cup.randomizers[0].description}"
+            puts "\tPlayer 1's turn is over"   
+            
+            # Player 1 puts die back in bag and shares bag with Player 2
+            puts "\tPlayer 1 places die back in shared bag for Player 2's turn"
+            player1.replace
+            player2.bag = player1.bag
+            assert_equal(player1.bag.randomizers.count, 4, "Player 1's bag should have 4 dice")
+            assert_equal(player2.bag.randomizers.count, 4, "Player 2's bag should have 4 dice")
+        end
 
     end
 

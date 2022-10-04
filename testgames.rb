@@ -125,22 +125,22 @@ class TestUseCases < Test::Unit::TestCase
         die2 = Die.new(6, :yellow)
         die3 = Die.new(6, :blue) # player 2
         die4 = Die.new(6, :blue)
-        puts "\t\tPlayer 1's dice attributes" + " EXPECTED: ".blue + "{:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow};" + " RECEIVED: ".blue + "#{die1.description}"
-        assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow} == die1.description, "Die is missing necessary attributes")
-        assert_equal(die1.description, die2.description, "Die 1 and Die 2 should have the same description")
-        puts "\t\tPlayer 2's dice attributes" + " EXPECTED: ".blue + "{:sides=>6, :up=>nil, :item=>:die, :colour=>:blue};" + " RECEIVED: ".blue + "#{die3.description}"
-        assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:blue} == die3.description, "Die is missing necessary attributes")
-        assert_equal(die3.description, die4.description, "Die 3 and Die 4 should have the same description")
 
         # put players' dice in their hands
         puts "\tPutting each player's dice in their hand"
         p1_hand = Hand.new
         p1_hand.store_all([die1, die2])
+        puts "\t\tPlayer 1's dice attributes" + " EXPECTED: ".blue + "{:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow};" + " RECEIVED: ".blue + "#{p1_hand.randomizers[0].description}"
+        assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:yellow} == p1_hand.randomizers[0].description, "Die is missing necessary attributes")
+        assert_equal(p1_hand.randomizers[0].description, p1_hand.randomizers[1].description, "Die 1 and Die 2 should have the same description")
+        puts "\t\tNum randomizers in Player 1's hand" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{p1_hand.randomizers.length}"
+        assert_not_nil(p1_hand.randomizers, "Player 1's hand should have 2 dice")
         p2_hand = Hand.new
         p2_hand.store_all([die3, die4])
-        puts "\t\tNum randomizers in Player 1's hand" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{p1_hand.randomizers.length}"
+        puts "\t\tPlayer 2's dice attributes" + " EXPECTED: ".blue + "{:sides=>6, :up=>nil, :item=>:die, :colour=>:blue};" + " RECEIVED: ".blue + "#{p2_hand.randomizers[0].description}"
+        assert({:sides=>6, :up=>nil, :item=>:die, :colour=>:blue} == p2_hand.randomizers[0].description, "Die is missing necessary attributes")
+        assert_equal(p2_hand.randomizers[0].description, p2_hand.randomizers[1].description, "Die 3 and Die 4 should have the same description")
         puts "\t\tNum randomizers in Player 2's hand" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{p2_hand.randomizers.length}"
-        assert_not_nil(p1_hand.randomizers, "Player 1's hand should have 2 dice")
         assert_not_nil(p2_hand.randomizers, "Player 2's hand should have 2 dice")
 
         # put players' coins in their bags
@@ -165,14 +165,16 @@ class TestUseCases < Test::Unit::TestCase
         # transfer coins from players' bags to the cup
         puts "\tTransferring each player's dice from their bag to their cup"
         player1.load
-        puts "\t\tNum randomizers in Player 1's bag" + " EXPECTED: ".blue + "0;" + " RECEIVED: ".blue + "#{player1.bag.randomizers.length}"
-        puts "\t\tNum randomizers in Player 1's cup" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{player1.cup.randomizers.length}"
-        assert_equal(player1.bag.randomizers, [], "Player 1's bag should be empty")
-        assert_not_equal(player1.cup.randomizers, [], "Player 1's cup should not be empty")
         player2.load
+        # ensure randomizers are no longer in bag
+        puts "\t\tNum randomizers in Player 1's bag" + " EXPECTED: ".blue + "0;" + " RECEIVED: ".blue + "#{player1.bag.randomizers.length}"
+        assert_equal(player1.bag.randomizers, [], "Player 1's bag should be empty")
         puts "\t\tNum randomizers in Player 2's bag" + " EXPECTED: ".blue + "0;" + " RECEIVED: ".blue + "#{player2.bag.randomizers.length}"
-        puts "\t\tNum randomizers in Player 2's cup" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{player2.cup.randomizers.length}"
         assert_equal(player2.bag.randomizers, [], "Player 2's bag should be empty")
+        # ensure randomizers are in cup
+        puts "\t\tNum randomizers in Player 1's cup" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{player1.cup.randomizers.length}"
+        assert_not_equal(player1.cup.randomizers, [], "Player 1's cup should not be empty")
+        puts "\t\tNum randomizers in Player 2's cup" + " EXPECTED: ".blue + "2;" + " RECEIVED: ".blue + "#{player2.cup.randomizers.length}"
         assert_not_equal(player2.cup.randomizers, [], "Player 2's cup should not be empty")
 
         # roll dice in cup

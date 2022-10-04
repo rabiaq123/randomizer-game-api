@@ -505,6 +505,13 @@ class TestUnusedMethods < Test::Unit::TestCase
     assert_equal(player.bag.count, 2, "Player's bag should have 2 randomizers in it")
     puts "\t\tNum randomizers in 'coins' array" + ' EXPECTED: '.blue + '2' + ' RECEIVED: '.blue + "#{coins.length}"
     assert_equal(coins.length, 2, "'coins' array should still have 2 randomizers in it")
+    
+    # emptying bag
+    puts "\tEmptying Player's bag"
+    player.bag.empty
+    puts "\t\tNum randomizers in bag" + ' EXPECTED: '.blue + '0' + ' RECEIVED: '.blue + "#{player.bag.count}"
+    assert_equal(player.bag.count, 0, "Player's bag should have 0 randomizers in it")
+
   end
 
   # checking unused Hand methods

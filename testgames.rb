@@ -10,9 +10,9 @@ class TestUseCases < Test::Unit::TestCase
     end
     String.include(Colours)
 
-    # Use Case 2: Choosing Who Makes the First Move
-    def test_uc_2
-        puts "\n\nTesting Use Case 2: Choosing who makes the first move\n"
+    # Use Case 1: Choosing Who Makes the First Move
+    def test_uc_1
+        puts "\n\nTesting Use Case 1: Choosing who makes the first move\n"
 
         # create all players
         puts "\tCreating 'Player 1', 'Player 2', and 'Player 3'"
@@ -108,9 +108,9 @@ class TestUseCases < Test::Unit::TestCase
         assert_equal(player3.tally(desc), [], "Player 3's tally should be empty")
     end
 
-    # Use Case 3: Advancing in Spots on a Game Board
-    def test_uc_3
-        puts "\n\nTesting Use Case 3: Advancing in Spots on a Game Board\n"
+    # Use Case 2: Advancing in Spots on a Game Board
+    def test_uc_2
+        puts "\n\nTesting Use Case 2: Advancing in Spots on a Game Board\n"
 
         # create all players
         puts "\tCreating 'Player 1' and 'Player 2'"
@@ -209,9 +209,9 @@ class TestUseCases < Test::Unit::TestCase
         assert_equal(player2.cup.randomizers, [], "Player 2's cup should be empty")
     end
 
-    # Use Case 4: Getting two turns in a row
-    def test_uc_4
-        puts "\n\nTesting Use Case 4: Getting two turns in a row\n"
+    # Use Case 3: Getting two turns in a row
+    def test_uc_3
+        puts "\n\nTesting Use Case 3: Getting two turns in a row\n"
 
         # create all players
         puts "\tCreating 'Player 1' and 'Player 2'"
@@ -285,9 +285,9 @@ class TestUseCases < Test::Unit::TestCase
         assert_equal(p2_hand.randomizers.count, 1, "Player 2's hand should have 1 die")
     end
 
-    # Use Case 5: Breaking a tie
-    def test_uc_5
-        puts "\n\nTesting Use Case 5: Breaking a tie\n"
+    # Use Case 4: Breaking a tie
+    def test_uc_4
+        puts "\n\nTesting Use Case 4: Breaking a tie\n"
 
         # create all players
         puts "\tCreating 'Player 1' and 'Player 2'"

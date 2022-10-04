@@ -339,7 +339,7 @@ class TestUseCases < Test::Unit::TestCase
 
     # put die in Player 1's cup
     puts "\tRandomly picking and placing one die in Player 1's cup"
-    player1.load_some({}, 1)
+    player1.load_amt({}, 1)
     # ensure randomizer is in bag and no longer in hand
     puts "\t\tNum randomizers in Player 1's bag" + ' EXPECTED: '.blue + '3;' + ' RECEIVED: '.blue + "#{player1.bag.count}"
     puts "\t\tNum randomizers in Player 1's cup" + ' EXPECTED: '.blue + '1;' + ' RECEIVED: '.blue + "#{player1.cup.count}"

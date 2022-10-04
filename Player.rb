@@ -78,7 +78,7 @@ class Player
     return @throw_results[idx].results
   end
 
-  def load_some(description = {}, amt) # HELPER: loads 'amt' items from the player’s bag to the player’s cup based on the description; returns self (for method chaining)
+  def load_amt(description = {}, amt) # HELPER: loads 'amt' items from the player’s bag to the player’s cup based on the description; returns self (for method chaining)
     @cup.load(@bag.select(description, amt))
     return self
   end

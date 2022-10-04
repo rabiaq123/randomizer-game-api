@@ -1,5 +1,5 @@
 class Randomizer
-  attr_accessor :sides, :up, :item, :num_randomizations, :description
+  attr_accessor :sides, :up, :item, :num_randomizations
 
   SIDES = {
     H: 1,

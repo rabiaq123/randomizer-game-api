@@ -12,7 +12,7 @@ This assignment asked students to implement classes and methods in Ruby from a g
 
 ## Compiling and Running
 
-In the root directory, run the following two commands:
+In the `src` directory, run the following two commands:
 
 * To run all tests: `ruby testgames.rb`
 * To run an individual test: `ruby testgames.rb -n test_name`
